@@ -27,11 +27,7 @@ public class PetController {
         Pet pet = petDTO
                     .toPet()
                     .associateOwner(owner);
-
         Pet persistedPet = petService.save(pet);
-        owner.getPets().add(persistedPet);
-
-        customerService.save(owner);
         return persistedPet.toDTO();
     }
 
