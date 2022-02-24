@@ -2,7 +2,7 @@ package com.udacity.jdnd.course3.critter.pet;
 
 import com.udacity.jdnd.course3.critter.user.Customer;
 import org.hibernate.annotations.Nationalized;
-import org.hibernate.annotations.Type;
+import org.springframework.beans.BeanUtils;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -18,7 +18,7 @@ public class Pet {
     @Nationalized
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "owner_id")
     private Customer owner;
 
@@ -86,5 +86,21 @@ public class Pet {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public PetDTO toDTO() {
+        PetDTO petDTO = new PetDTO();
+        BeanUtils.copyProperties(this, petDTO);
+        petDTO.setOwnerId(this.owner.getId());
+        return petDTO;
+    }
+
+    public static PetDTO newDTOFromPet(Pet pet)  {
+        return pet.toDTO();
+    }
+
+    public Pet associateOwner(Customer owner) {
+        this.setOwner(owner);
+        return this;
     }
 }
