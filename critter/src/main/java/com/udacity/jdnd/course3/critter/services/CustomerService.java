@@ -30,4 +30,9 @@ public class CustomerService {
             throw new EntityNotFoundException("Customer with id: " + customerId + " not found. Please verify that id is correct.");
         }
     }
+
+    public void delete(long customerId) {
+        Customer customer = customerRepository.getOne(customerId);
+        customerRepository.delete(customer);
+    }
 }

@@ -32,11 +32,15 @@ public class UserController {
     @Autowired
     PetService petService;
 
-
     @PostMapping("/customer")
     public CustomerDTO saveCustomer(@RequestBody CustomerDTO customerDTO) {
         Customer persistedCustomer = customerService.save(customerDTO.toCustomer());
         return persistedCustomer.toDTO();
+    }
+
+    @DeleteMapping("/customer/{customerId}")
+    public void deleteCustomerById(@PathVariable long customerId) {
+        customerService.delete(customerId);
     }
 
     @GetMapping("/customer")
