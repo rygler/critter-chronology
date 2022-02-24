@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @Entity
 public class Customer {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Nationalized
@@ -34,23 +34,6 @@ public class Customer {
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "owner", cascade = CascadeType.MERGE)
     private List<Pet> pets;
-
-//    public Customer(String phoneNumber, String notes, List<Pet> pets) {
-//        this.phoneNumber = phoneNumber;
-//        this.notes = notes;
-//        this.pets = pets;
-//    }
-//
-//    public Customer(Long id, String name, String phoneNumber, String notes, List<Pet> pets) {
-//        super(id, name);
-//        this.phoneNumber = phoneNumber;
-//        this.notes = notes;
-//        this.pets = pets;
-//    }
-//
-//    public Customer() {
-//    }
-
 
     public Long getId() {
         return id;
