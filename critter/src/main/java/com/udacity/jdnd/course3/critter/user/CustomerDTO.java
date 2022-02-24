@@ -1,5 +1,8 @@
 package com.udacity.jdnd.course3.critter.user;
 
+import com.udacity.jdnd.course3.critter.pet.Pet;
+import org.springframework.beans.BeanUtils;
+
 import java.util.List;
 
 /**
@@ -52,4 +55,12 @@ public class CustomerDTO {
     public void setPetIds(List<Long> petIds) {
         this.petIds = petIds;
     }
+
+    public Customer toCustomer() {
+        Customer customer = new Customer();
+        BeanUtils.copyProperties(this, customer);
+
+        return customer;
+    }
+
 }

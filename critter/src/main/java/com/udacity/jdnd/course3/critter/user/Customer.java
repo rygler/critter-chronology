@@ -2,9 +2,12 @@ package com.udacity.jdnd.course3.critter.user;
 
 import com.udacity.jdnd.course3.critter.pet.Pet;
 import org.hibernate.annotations.Nationalized;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.BeanUtils;
 
 import javax.persistence.CascadeType;
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @NamedQuery(
@@ -13,7 +16,7 @@ import java.util.List;
 )
 
 @Entity
-public class Customer{
+public class Customer {
     @Id
     @GeneratedValue
     private Long id;
@@ -27,7 +30,7 @@ public class Customer{
     @Nationalized
     private String notes;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner", cascade = CascadeType.MERGE)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "owner", cascade = CascadeType.MERGE)
     private List<Pet> pets;
 
 //    public Customer(String phoneNumber, String notes, List<Pet> pets) {
@@ -80,10 +83,36 @@ public class Customer{
     }
 
     public List<Pet> getPets() {
+        if (pets == null) {
+            pets = new ArrayList<>();
+        }
         return pets;
     }
 
     public void setPets(List<Pet> pets) {
         this.pets = pets;
+    }
+
+    public CustomerDTO toDTO() {
+        CustomerDTO customerDTO = new CustomerDTO();
+        BeanUtils.copyProperties(this, customerDTO);
+        if (this.pets != null) {
+            List<Long> petIds = new ArrayList<>();
+            for (Pet p : this.pets) {
+                petIds.add(p.getId());
+            }
+            customerDTO.setPetIds(petIds);
+        }
+        return customerDTO;
+    }
+
+    public static CustomerDTO newDTOFromCustomer(Customer customer) {
+        return customer.toDTO();
+    }
+
+
+    public Customer associatePets(List<Pet> pets) {
+        this.setPets(pets);
+        return this;
     }
 }

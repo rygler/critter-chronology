@@ -1,8 +1,13 @@
 package com.udacity.jdnd.course3.critter.pet;
 
+import com.udacity.jdnd.course3.critter.services.CustomerService;
+import com.udacity.jdnd.course3.critter.services.PetService;
+import com.udacity.jdnd.course3.critter.user.Customer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Handles web requests related to Pets.
@@ -10,24 +15,47 @@ import java.util.List;
 @RestController
 @RequestMapping("/pet")
 public class PetController {
+    @Autowired
+    PetService petService;
+
+    @Autowired
+    CustomerService customerService;
 
     @PostMapping
     public PetDTO savePet(@RequestBody PetDTO petDTO) {
-        throw new UnsupportedOperationException();
+        Customer owner = customerService.find(petDTO.getOwnerId());
+        Pet pet = petDTO
+                    .toPet()
+                    .associateOwner(owner);
+
+        Pet persistedPet = petService.save(pet);
+        owner.getPets().add(persistedPet);
+
+        customerService.save(owner);
+        return persistedPet.toDTO();
     }
 
     @GetMapping("/{petId}")
     public PetDTO getPet(@PathVariable long petId) {
-        throw new UnsupportedOperationException();
+        return petService.find(petId).toDTO();
     }
 
     @GetMapping
-    public List<PetDTO> getPets(){
-        throw new UnsupportedOperationException();
+    public List<PetDTO> getPets() {
+        return petService
+                .findAll()
+                .stream()
+                .map(Pet::newDTOFromPet)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/owner/{ownerId}")
     public List<PetDTO> getPetsByOwner(@PathVariable long ownerId) {
-        throw new UnsupportedOperationException();
+        return customerService
+                .find(ownerId)
+                .getPets()
+                .stream()
+                .map(Pet::newDTOFromPet)
+                .collect(Collectors.toList());
     }
 }
