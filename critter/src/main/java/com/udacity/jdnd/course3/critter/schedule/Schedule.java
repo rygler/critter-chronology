@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class Schedule {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
