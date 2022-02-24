@@ -18,18 +18,11 @@ public class CustomerService {
     CustomerRepositoryV2 customerRepositoryV2;
 
     public Customer save(Customer customer) {
-        setOwnerOnPets(customer);
         return customerRepositoryV2.save(customer);
     }
 
     public List<Customer> findAll() {
         return customerRepositoryV2.findAll();
-    }
-
-    private void setOwnerOnPets(Customer customer) {
-        if (customer.getPets() != null) {
-            customer.getPets().forEach(pet -> pet.setOwner(customer));
-        }
     }
 
     public Customer find(long customerId) {
