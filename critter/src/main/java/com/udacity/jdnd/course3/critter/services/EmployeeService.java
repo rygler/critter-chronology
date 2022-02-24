@@ -4,7 +4,6 @@ import com.udacity.jdnd.course3.critter.repositories.EmployeeRepository;
 import com.udacity.jdnd.course3.critter.user.Employee;
 import com.udacity.jdnd.course3.critter.user.EmployeeSkill;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -54,5 +53,9 @@ public class EmployeeService {
                 .stream()
                 .filter(employee -> employee.getSkills().containsAll(skills))
                 .collect(Collectors.toList());
+    }
+
+    public Set<Employee> findByIds(List<Long> employeeIds) {
+        return employeeRepository.findEmployeesByIdIn(employeeIds);
     }
 }
