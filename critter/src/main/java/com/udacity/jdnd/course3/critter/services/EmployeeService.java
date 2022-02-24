@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.DayOfWeek;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class EmployeeService {
@@ -37,5 +39,10 @@ public class EmployeeService {
 
     public void delete(long employeeId) {
         employeeRepository.deleteById(employeeId);
+    }
+
+    public void setAvailability(Set<DayOfWeek> daysAvailable, Employee employee) {
+        employee.setDaysAvailable(daysAvailable);
+        employeeRepository.save(employee);
     }
 }
