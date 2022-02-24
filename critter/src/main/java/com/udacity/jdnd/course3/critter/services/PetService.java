@@ -25,20 +25,10 @@ public class PetService {
     CustomerRepositoryV2 customerRepository;
 
     public Pet save(Pet pet) {
-        Optional<Customer> ownerOptional = customerRepository.findById(pet.getOwner().getId());
-        if (ownerOptional.isPresent()) {
-            Customer owner = ownerOptional.get();
-            if (owner.getPets() == null) {
-                owner.setPets(new ArrayList<>());
-            }
-            pet.setOwner(owner);
-            customerRepository.save(owner);
-        } else {
-            // TODO: Switch to accurate exception
-            throw new EntityNotFoundException("Pet must have an existing owner.");
-        }
-
-        return petRepository.save(pet);
+        Pet persistedPet = petRepository.save(pet);
+        persistedPet.getOwner().getPets().add(persistedPet);
+        customerRepository.save(persistedPet.getOwner());
+        return persistedPet;
     }
 
     public Pet find(long petId) {
