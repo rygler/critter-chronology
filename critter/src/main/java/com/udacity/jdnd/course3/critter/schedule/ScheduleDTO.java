@@ -1,6 +1,7 @@
 package com.udacity.jdnd.course3.critter.schedule;
 
 import com.udacity.jdnd.course3.critter.user.EmployeeSkill;
+import org.springframework.beans.BeanUtils;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -55,5 +56,11 @@ public class ScheduleDTO {
 
     public void setActivities(Set<EmployeeSkill> activities) {
         this.activities = activities;
+    }
+
+    public Schedule toSchedule() {
+        Schedule schedule = new Schedule();
+        BeanUtils.copyProperties(this, schedule);
+        return schedule;
     }
 }

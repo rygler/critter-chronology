@@ -19,7 +19,7 @@ public class Pet {
     private String name;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "owner_id")
+//    @JoinColumn(name = "owner_id")
     private Customer owner;
 
     private LocalDate birthDate;

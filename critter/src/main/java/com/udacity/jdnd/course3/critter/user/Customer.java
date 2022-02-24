@@ -1,5 +1,6 @@
 package com.udacity.jdnd.course3.critter.user;
 
+import com.google.common.collect.Lists;
 import com.udacity.jdnd.course3.critter.pet.Pet;
 import org.hibernate.annotations.Nationalized;
 import org.jetbrains.annotations.NotNull;
@@ -9,6 +10,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @NamedQuery(
         name = "Customer.all",
@@ -97,10 +99,7 @@ public class Customer {
         CustomerDTO customerDTO = new CustomerDTO();
         BeanUtils.copyProperties(this, customerDTO);
         if (this.pets != null) {
-            List<Long> petIds = new ArrayList<>();
-            for (Pet p : this.pets) {
-                petIds.add(p.getId());
-            }
+            List<Long> petIds = this.pets.stream().map(Pet::getId).collect(Collectors.toList());
             customerDTO.setPetIds(petIds);
         }
         return customerDTO;

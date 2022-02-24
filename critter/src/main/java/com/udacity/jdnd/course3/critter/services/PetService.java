@@ -54,4 +54,8 @@ public class PetService {
     public void delete(long petId) {
         petRepository.deleteById(petId);
     }
+
+    public List<Pet> findByIds(List<Long> petIds) {
+        return petRepository.findPetsByIdIn(petIds);
+    }
 }
