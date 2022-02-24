@@ -2,14 +2,16 @@ package com.udacity.jdnd.course3.critter.services;
 
 import com.udacity.jdnd.course3.critter.repositories.EmployeeRepository;
 import com.udacity.jdnd.course3.critter.user.Employee;
+import com.udacity.jdnd.course3.critter.user.EmployeeSkill;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.DayOfWeek;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.time.LocalDate;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class EmployeeService {
@@ -21,7 +23,7 @@ public class EmployeeService {
     }
 
     public Employee find(long employeeId) {
-        Optional<Employee> employeeOptional =  employeeRepository.findById(employeeId);
+        Optional<Employee> employeeOptional = employeeRepository.findById(employeeId);
         if (employeeOptional.isPresent()) {
             return employeeOptional.get();
         } else {
@@ -44,5 +46,13 @@ public class EmployeeService {
     public void setAvailability(Set<DayOfWeek> daysAvailable, Employee employee) {
         employee.setDaysAvailable(daysAvailable);
         employeeRepository.save(employee);
+    }
+
+    public List<Employee> findEmployeesForService(LocalDate date, Set<EmployeeSkill> skills) {
+        return employeeRepository
+                .findEmployeesByDaysAvailableContaining(date.getDayOfWeek())
+                .stream()
+                .filter(employee -> employee.getSkills().containsAll(skills))
+                .collect(Collectors.toList());
     }
 }

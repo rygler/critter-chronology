@@ -8,7 +8,7 @@ import java.time.DayOfWeek;
 import java.util.Set;
 
 @Entity
-public class Employee{
+public class Employee {
     @Id
     @GeneratedValue
     private Long id;
@@ -69,5 +69,15 @@ public class Employee{
 
     public void setDaysAvailable(Set<DayOfWeek> daysAvailable) {
         this.daysAvailable = daysAvailable;
+    }
+
+    public EmployeeDTO toDTO() {
+        EmployeeDTO employeeDTO = new EmployeeDTO();
+        BeanUtils.copyProperties(this, employeeDTO);
+        return employeeDTO;
+    }
+
+    public static EmployeeDTO newDTOFromEmployee(Employee employee) {
+        return employee.toDto();
     }
 }

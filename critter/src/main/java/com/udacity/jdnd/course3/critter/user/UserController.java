@@ -41,7 +41,8 @@ public class UserController {
 
     @GetMapping("/customer")
     public List<CustomerDTO> getAllCustomers() {
-        return customerService.findAll()
+        return customerService
+                .findAll()
                 .stream()
                 .map(Customer::newDTOFromCustomer)
                 .collect(Collectors.toList());
@@ -73,8 +74,10 @@ public class UserController {
 
     @GetMapping("/employee/availability")
     public List<EmployeeDTO> findEmployeesForService(@RequestBody EmployeeRequestDTO employeeDTO) {
-        throw new UnsupportedOperationException();
+        return employeeService
+                .findEmployeesForService(employeeDTO.getDate(), employeeDTO.getSkills())
+                .stream()
+                .map(Employee::newDTOFromEmployee)
+                .collect(Collectors.toList());
     }
-
-
 }
