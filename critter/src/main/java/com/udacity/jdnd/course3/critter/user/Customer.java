@@ -1,9 +1,7 @@
 package com.udacity.jdnd.course3.critter.user;
 
-import com.google.common.collect.Lists;
 import com.udacity.jdnd.course3.critter.pet.Pet;
 import org.hibernate.annotations.Nationalized;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.BeanUtils;
 
 import javax.persistence.CascadeType;
@@ -11,11 +9,6 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-@NamedQuery(
-        name = "Customer.all",
-        query = "SELECT c FROM Customer c"
-)
 
 @Entity
 public class Customer {
